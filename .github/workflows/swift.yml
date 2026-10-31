@@ -1,7 +1,8 @@
-# This workflow will build a Swift project
-# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-swift
+# Builds and tests the DotBloom iOS app.
+# The Xcode project is generated from project.yml by XcodeGen,
+# so there is no Package.swift and `swift build` does not apply.
 
-name: Swift
+name: iOS
 
 on:
   push:
@@ -11,12 +12,40 @@ on:
 
 jobs:
   build:
-
-    runs-on: macos-latest
+    runs-on: macos-15
 
     steps:
     - uses: actions/checkout@v4
-    - name: Build
-      run: swift build -v
-    - name: Run tests
-      run: swift test -v
+
+    - name: Install XcodeGen
+      run: brew install xcodegen
+
+    - name: Generate Xcode project
+      run: xcodegen generate
+
+    - name: Pick an iPhone simulator
+      id: sim
+      run: |
+        udid=$(xcrun simctl list devices available -j \
+          | python3 -c 'import json,sys; d=json.load(sys.stdin)["devices"]; print(next(x["udid"] for r,v in d.items() if "iOS" in r for x in v if x["name"].startswith("iPhone")))')
+        echo "Using simulator $udid"
+        echo "udid=$udid" >> "$GITHUB_OUTPUT"
+
+    - name: Build and test
+      run: |
+        status=0
+        xcodebuild test \
+          -project DotBloom.xcodeproj \
+          -scheme DotBloom \
+          -destination "id=${{ steps.sim.outputs.udid }}" \
+          CODE_SIGNING_ALLOWED=NO \
+          > xcodebuild.log 2>&1 || status=$?
+        grep -E "error:|Test Case .* failed|Executed|\*\* (BUILD|TEST)" xcodebuild.log || tail -50 xcodebuild.log
+        exit $status
+
+    - name: Upload build log
+      if: always()
+      uses: actions/upload-artifact@v4
+      with:
+        name: xcodebuild-log
+        path: xcodebuild.log
