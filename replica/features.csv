@@ -1,0 +1,36 @@
+feature,area,priority,original,clone,notes
+Connect 2+ same-color dots orthogonally,core,must,yes,yes,backtrack by dragging to previous dot
+Closed loop clears every dot of that color,core,must,yes,yes,
+Dots enclosed by a loop become bombs (3x3 blast),core,must,yes,yes,
+Gravity refill with new dots,core,must,yes,yes,
+Auto-shuffle when no moves,core,must,yes,yes,
+Limited moves per level,core,must,yes,yes,
+Goals: collect colors,goals,must,yes,yes,
+Goals: sink anchors,goals,must,yes,yes,
+Goals: break ice (multi-hit),goals,must,yes,yes,
+Goals: put out fire (spreads if ignored),goals,should,yes,yes,
+Holes / shaped boards,levels,should,yes,yes,
+1-3 star rating,progression,must,yes,yes,
+World map with sequential unlock,progression,must,yes,yes,
+Level intro sheet,ui,must,yes,yes,
+Win / out-of-moves screens,ui,must,yes,yes,
+Booster: hammer (clear one dot),boosters,must,yes,yes,
+Booster: shuffle,boosters,should,yes,yes,
+Booster: bomb,boosters,should,yes,yes,
+Booster: +5 moves,boosters,should,yes,yes,
+Coins economy,economy,should,yes,yes,earned only in v1
+Lives / energy timer,economy,skip,yes,no,deliberately dropped: top user complaint
+Daily seeded challenge,events,must,partial,yes,our viral hook; original has timed events
+Share result card,social,must,no,yes,emoji grid + score
+Daily streak,events,should,partial,yes,
+Arcade timed mode,modes,should,yes,yes,
+Flip / Scavenger Hunt / Rewind modes,modes,could,yes,no,later
+Season pass,economy,could,yes,no,later
+Game Center leaderboards,social,could,yes,no,later
+Colorblind mode,accessibility,must,yes,yes,shape glyph per color
+Haptics,polish,must,yes,yes,
+Sound effects,polish,should,yes,yes,synthesized tones
+iPad layout,platform,must,yes,yes,
+Persistence,platform,must,yes,yes,UserDefaults JSON
+Handcrafted 5000+ levels,content,skip,yes,no,replaced by seeded generator
+Original art/music/characters,content,skip,yes,no,owned by Zynga
