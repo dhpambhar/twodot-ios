@@ -32,7 +32,7 @@ final class Feedback {
         engine.mainMixerNode.outputVolume = 0.5
         // C major pentatonic across two and a half octaves.
         let semitones = [0, 2, 4, 7, 9, 12, 14, 16, 19, 21, 24, 26, 28, 31]
-        notes = semitones.map { tone(frequency: 523.25 * pow(2, Double($0) / 12), duration: 0.18, format: format) }
+        notes = semitones.compactMap { tone(frequency: 523.25 * pow(2, Double($0) / 12), duration: 0.18, format: format) }
         chord = tone(frequencies: [523.25, 659.25, 783.99, 1046.5], duration: 0.5, format: format)
         thud = tone(frequency: 196, duration: 0.12, format: format)
         try? engine.start()
@@ -40,6 +40,7 @@ final class Feedback {
 
     func link(_ index: Int) {
         if hapticsOn { light.impactOccurred(intensity: min(1, 0.4 + Double(index) * 0.08)) }
+        guard !notes.isEmpty else { return }
         play(notes[min(max(index, 0), notes.count - 1)])
     }
 
